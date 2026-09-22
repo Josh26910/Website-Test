@@ -87,18 +87,34 @@
     }
     var rand = mulberry32(42);
 
-    var W = 640, H = 420, COUNT = 22, ACCENT = 5;
-    var nodes = [];
-    for (var i = 0; i < COUNT; i++) {
-      nodes.push({ id: i, x: 40 + rand() * (W - 80), y: 40 + rand() * (H - 80), accent: false });
-    }
-    var accentIdx = [];
-    while (accentIdx.length < ACCENT) {
-      var idx = Math.floor(rand() * COUNT);
-      if (accentIdx.indexOf(idx) === -1) { accentIdx.push(idx); nodes[idx].accent = true; }
-    }
+    var W = 640, H = 420;
+    var HUB_DEFS = [
+      { label: 'ECON 201', x: 140, y: 125 },
+      { label: 'BIO 110', x: 480, y: 105 },
+      { label: 'CHEM 204', x: 160, y: 305 },
+      { label: 'PSYC 101', x: 495, y: 310 }
+    ];
+    var ACTIONS = ['+3 questions', 'New session', 'Score shared', 'Bank updated', 'Streak kept', 'Room opened', 'Round finished'];
 
-    function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+    var nodes = [];
+    var hubIds = [];
+    HUB_DEFS.forEach(function (h) {
+      var hubId = nodes.length;
+      nodes.push({ id: hubId, x: h.x, y: h.y, isHub: true, hub: null, label: h.label });
+      hubIds.push(hubId);
+
+      var branchCount = 4 + Math.floor(rand() * 3);
+      for (var b = 0; b < branchCount; b++) {
+        var angle = (b / branchCount) * Math.PI * 2 + rand() * 0.6;
+        var radius = 62 + rand() * 30;
+        var bx = Math.max(26, Math.min(W - 26, h.x + Math.cos(angle) * radius));
+        var by = Math.max(26, Math.min(H - 26, h.y + Math.sin(angle) * radius));
+        nodes.push({
+          id: nodes.length, x: bx, y: by, isHub: false, hub: hubId,
+          label: ACTIONS[Math.floor(rand() * ACTIONS.length)]
+        });
+      }
+    });
 
     var edgeSet = {};
     var edges = [];
@@ -109,17 +125,18 @@
       edges.push({ a: a, b: b, custom: false });
     }
     nodes.forEach(function (n) {
-      var others = nodes.filter(function (m) { return m.id !== n.id; })
-        .sort(function (p, q) { return dist(n, p) - dist(n, q); });
-      addEdge(n.id, others[0].id);
-      addEdge(n.id, others[1].id);
+      if (!n.isHub) addEdge(n.hub, n.id);
     });
 
     var NS = 'http://www.w3.org/2000/svg';
     var edgeLayer = document.createElementNS(NS, 'g');
+    var arrowLayer = document.createElementNS(NS, 'g');
     var nodeLayer = document.createElementNS(NS, 'g');
+    var labelLayer = document.createElementNS(NS, 'g');
     svg.appendChild(edgeLayer);
+    svg.appendChild(arrowLayer);
     svg.appendChild(nodeLayer);
+    svg.appendChild(labelLayer);
 
     function drawEdge(e) {
       var a = nodes[e.a], b = nodes[e.b];
@@ -133,41 +150,92 @@
     edges.forEach(drawEdge);
 
     var nodeEls = {};
+    var labelEls = {};
     nodes.forEach(function (n) {
       var g = document.createElementNS(NS, 'g');
-      g.setAttribute('class', 'net-node' + (n.accent ? ' is-accent' : ''));
+      g.setAttribute('class', 'net-node' + (n.isHub ? ' is-hub' : ''));
       g.setAttribute('data-id', n.id);
 
       var glow = document.createElementNS(NS, 'circle');
       glow.setAttribute('class', 'glow');
-      glow.setAttribute('cx', n.x); glow.setAttribute('cy', n.y); glow.setAttribute('r', 13);
+      glow.setAttribute('cx', n.x); glow.setAttribute('cy', n.y); glow.setAttribute('r', n.isHub ? 16 : 10);
       g.appendChild(glow);
 
       var ring = document.createElementNS(NS, 'circle');
       ring.setAttribute('class', 'ring');
-      ring.setAttribute('cx', n.x); ring.setAttribute('cy', n.y); ring.setAttribute('r', 9);
+      ring.setAttribute('cx', n.x); ring.setAttribute('cy', n.y); ring.setAttribute('r', n.isHub ? 11 : 8);
       g.appendChild(ring);
 
       var dot = document.createElementNS(NS, 'circle');
       dot.setAttribute('class', 'dot');
       dot.setAttribute('cx', n.x); dot.setAttribute('cy', n.y);
-      dot.setAttribute('r', n.accent ? 5.5 : 3.5);
+      dot.setAttribute('r', n.isHub ? 7 : 3.5);
       g.appendChild(dot);
 
       nodeLayer.appendChild(g);
       nodeEls[n.id] = g;
+
+      var text = document.createElementNS(NS, 'text');
+      text.setAttribute('class', 'net-label' + (n.isHub ? ' is-hub-label' : ''));
+      text.setAttribute('x', n.x);
+      text.setAttribute('y', n.isHub ? n.y - 18 : n.y - 12);
+      text.setAttribute('text-anchor', 'middle');
+      text.textContent = n.label;
+      labelLayer.appendChild(text);
+      labelEls[n.id] = text;
+    });
+
+    // Flying arrow markers, one per hub -> branch edge
+    var arrowsByHub = {};
+    edges.forEach(function (e) {
+      var hub = nodes[e.a].isHub ? nodes[e.a] : (nodes[e.b].isHub ? nodes[e.b] : null);
+      if (!hub || e.custom) return;
+      var branch = hub.id === e.a ? nodes[e.b] : nodes[e.a];
+      var angleDeg = Math.atan2(branch.y - hub.y, branch.x - hub.x) * (180 / Math.PI);
+
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'net-arrow');
+      g.setAttribute('transform', 'translate(' + hub.x + ',' + hub.y + ') rotate(' + angleDeg + ')');
+      var poly = document.createElementNS(NS, 'polygon');
+      poly.setAttribute('points', '-5,-3 5,0 -5,3');
+      g.appendChild(poly);
+      arrowLayer.appendChild(g);
+
+      if (hasGSAP) {
+        var tween = gsap.to(g, {
+          x: branch.x, y: branch.y, duration: 1 + rand() * 0.4,
+          ease: 'power1.inOut', repeat: -1, paused: true
+        });
+        (arrowsByHub[hub.id] = arrowsByHub[hub.id] || []).push({ el: g, tween: tween });
+      }
     });
 
     function neighborsOf(id) {
       return edges.filter(function (e) { return e.a === id || e.b === id; });
     }
 
+    function stopArrows(hubId) {
+      (arrowsByHub[hubId] || []).forEach(function (a) {
+        a.tween.pause(0);
+        a.el.classList.remove('is-active');
+      });
+    }
+    function playArrows(hubId) {
+      (arrowsByHub[hubId] || []).forEach(function (a) {
+        a.el.classList.add('is-active');
+        a.tween.restart();
+      });
+    }
+
     function clearHighlight() {
       Object.keys(nodeEls).forEach(function (id) { nodeEls[id].classList.remove('is-lit', 'is-dim'); });
       edges.forEach(function (e) { e.el.classList.remove('is-lit', 'is-dim'); });
+      Object.keys(labelEls).forEach(function (id) { labelEls[id].classList.remove('is-visible'); });
+      hubIds.forEach(stopArrows);
     }
 
     function highlight(id) {
+      var node = nodes[id];
       var connectedIds = {};
       connectedIds[id] = true;
       neighborsOf(id).forEach(function (e) { connectedIds[e.a] = true; connectedIds[e.b] = true; });
@@ -181,6 +249,13 @@
         var lit = e.a === id || e.b === id;
         e.el.classList.toggle('is-lit', lit);
         e.el.classList.toggle('is-dim', !lit);
+      });
+      Object.keys(labelEls).forEach(function (nid) {
+        labelEls[nid].classList.toggle('is-visible', !!connectedIds[nid]);
+      });
+
+      hubIds.forEach(function (hid) {
+        if (node.isHub && hid === id) playArrows(hid); else stopArrows(hid);
       });
     }
 
@@ -241,7 +316,7 @@
     }
 
     if (hasGSAP) {
-      var glows = svg.querySelectorAll('.net-node.is-accent .glow');
+      var glows = svg.querySelectorAll('.net-node.is-hub .glow');
       for (var gi = 0; gi < glows.length; gi++) {
         gsap.to(glows[gi], {
           opacity: 0.4, duration: 2.2 + (gi % 3), repeat: -1, yoyo: true, ease: 'sine.inOut', delay: gi * 0.3

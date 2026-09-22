@@ -407,15 +407,35 @@ img,svg{display:block; max-width:100%;}
 
 .net-node{ cursor:pointer; }
 .net-node circle.dot{ fill:var(--ink-faint); transition:fill 0.2s ease; }
-.net-node.is-accent circle.dot{ fill:var(--accent); }
+.net-node.is-hub circle.dot{ fill:var(--accent); }
 .net-node circle.glow{ fill:var(--accent); opacity:0; transition:opacity 0.3s ease; }
-.net-node.is-accent circle.glow{ opacity:0.18; }
+.net-node.is-hub circle.glow{ opacity:0.18; }
 .net-node.is-lit circle.dot{ fill:var(--accent); }
 .net-node.is-lit circle.glow{ opacity:0.32; }
 .net-node.is-dim{ opacity:0.3; transition:opacity 0.2s ease; }
 .net-node circle.ring{ opacity:0; fill:none; stroke:var(--accent); stroke-width:2; transition:opacity 0.2s ease; }
 .net-node.is-selected circle.dot{ fill:var(--ink); }
 .net-node.is-selected circle.ring{ opacity:1; }
+
+.net-label{
+  font-family:'Inter', sans-serif;
+  font-size:9px;
+  font-weight:600;
+  fill:var(--ink-soft);
+  paint-order:stroke;
+  stroke:#fff;
+  stroke-width:3px;
+  stroke-linejoin:round;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.25s ease;
+}
+.net-label.is-hub-label{ font-size:11px; font-weight:700; fill:var(--accent); }
+.net-label.is-visible{ opacity:1; }
+
+.net-arrow{ opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
+.net-arrow polygon{ fill:var(--accent); }
+.net-arrow.is-active{ opacity:0.9; }
 
 /* ============ scroll-driven quiz deck ============ */
 .deck{
