@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recall — Group study for your course cohort</title>
+<meta name="description" content="Recall is an invite-only quiz and study-group app built for course cohorts. Ask your tutor for an invite code.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23c1512a%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 font-family=%22Georgia,serif%22 fill=%22%23f6f1e7%22 text-anchor=%22middle%22>R</text></svg>">
+</head>
+<body>
+
+<!-- Intro loader -->
+<div class="loader" id="loader">
+  <div class="loader-mark">Recall</div>
+  <div class="loader-count" id="loaderCount">0%</div>
+</div>
+
+<div id="page">
+
+<!-- Nav -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">Recall</a>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#access" class="nav-cta">Get an invite <span aria-hidden="true">&rarr;</span></a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow reveal-up">Invite-only &middot; built for course cohorts</p>
+      <h1 class="hero-title">
+        <span class="line reveal-up">Group study,</span>
+        <span class="line reveal-up">minus the group</span>
+        <span class="line reveal-up">chat chaos.</span>
+      </h1>
+      <p class="hero-sub reveal-up">
+        Recall turns your cohort into quiz squads. Pull questions from your own notes,
+        run live rounds with your study group, and see what's actually sticking before the exam does.
+      </p>
+      <div class="hero-actions reveal-up">
+        <span class="btn btn-primary" role="note">Ask your tutor for an invite code</span>
+        <span class="hero-note">No public sign-up. Access is invite-only, by design.</span>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal-scale">
+      <div class="device device-quiz">
+        <div class="device-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="device-body">
+          <div class="quiz-header">
+            <span class="quiz-room">ECON 201 &middot; Room 4</span>
+            <span class="quiz-timer">00:14</span>
+          </div>
+          <p class="quiz-q">Which curve shifts right when consumer income rises for a normal good?</p>
+          <div class="quiz-options">
+            <div class="quiz-opt is-correct"><span>A</span>Demand curve</div>
+            <div class="quiz-opt"><span>B</span>Supply curve</div>
+            <div class="quiz-opt"><span>C</span>Indifference curve</div>
+            <div class="quiz-opt"><span>D</span>Production curve</div>
+          </div>
+          <div class="quiz-players">
+            <div class="player"><span class="avatar" style="--c:#c1512a">M</span>Maya <b>+120</b></div>
+            <div class="player"><span class="avatar" style="--c:#7c8a5c">J</span>Jian <b>+90</b></div>
+            <div class="player"><span class="avatar" style="--c:#4c6b8a">S</span>Sam <b>+80</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee strip -->
+  <section class="strip">
+    <div class="strip-track">
+      <span>Live quiz rounds</span><span>&middot;</span>
+      <span>Shared question banks</span><span>&middot;</span>
+      <span>Study session rooms</span><span>&middot;</span>
+      <span>Private progress tracking</span><span>&middot;</span>
+      <span>Cohort-only access</span><span>&middot;</span>
+      <span>Live quiz rounds</span><span>&middot;</span>
+      <span>Shared question banks</span><span>&middot;</span>
+      <span>Study session rooms</span><span>&middot;</span>
+      <span>Private progress tracking</span><span>&middot;</span>
+      <span>Cohort-only access</span><span>&middot;</span>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="section-head">
+      <p class="eyebrow reveal-up">What it does</p>
+      <h2 class="section-title reveal-up">Everything your study group already does &mdash; just faster, and organised.</h2>
+    </div>
+
+    <div class="feature-row reveal-up">
+      <div class="feature-copy">
+        <span class="feature-num">01</span>
+        <h3>Live group quizzes</h3>
+        <p>Turn a shared question bank into a real-time round. Everyone answers on their own device, the room sees the scoreboard update as it happens.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="mock mock-score">
+          <div class="mock-row" style="--w:88%"><span>Priya</span><em>880</em></div>
+          <div class="mock-row" style="--w:71%"><span>Declan</span><em>710</em></div>
+          <div class="mock-row" style="--w:64%"><span>Amara</span><em>640</em></div>
+          <div class="mock-row" style="--w:52%"><span>You</span><em>520</em></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row feature-row-rev reveal-up">
+      <div class="feature-copy">
+        <span class="feature-num">02</span>
+        <h3>Shared question banks</h3>
+        <p>Build a bank together as a cohort. Add a question from a lecture slide in seconds &mdash; every quiz after that gets a little smarter.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="mock mock-bank">
+          <div class="bank-item">Week 4 &mdash; Elasticity <span>12 cards</span></div>
+          <div class="bank-item">Week 5 &mdash; Market failure <span>9 cards</span></div>
+          <div class="bank-item">Week 6 &mdash; Game theory <span>15 cards</span></div>
+          <div class="bank-item bank-item-add">+ Add a question</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row reveal-up">
+      <div class="feature-copy">
+        <span class="feature-num">03</span>
+        <h3>Study session rooms</h3>
+        <p>Drop into a room, pick a topic, and work through it out loud together &mdash; no scheduling five different group chats to find a time.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="mock mock-room">
+          <div class="room-title">Thursday recap &middot; open now</div>
+          <div class="room-avatars">
+            <span class="avatar" style="--c:#c1512a">L</span>
+            <span class="avatar" style="--c:#7c8a5c">K</span>
+            <span class="avatar" style="--c:#4c6b8a">T</span>
+            <span class="avatar avatar-ghost">+3</span>
+          </div>
+          <div class="room-status">In progress &middot; Topic: Supply shocks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-row feature-row-rev reveal-up">
+      <div class="feature-copy">
+        <span class="feature-num">04</span>
+        <h3>Progress, not grades</h3>
+        <p>See which topics are actually sticking and which need another pass. It's for you &mdash; nothing here goes on a transcript.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="mock mock-progress">
+          <div class="prog-item"><span>Elasticity</span><div class="bar"><i style="--w:82%"></i></div></div>
+          <div class="prog-item"><span>Market failure</span><div class="bar"><i style="--w:54%"></i></div></div>
+          <div class="prog-item"><span>Game theory</span><div class="bar"><i style="--w:31%"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how" id="how">
+    <div class="section-head">
+      <p class="eyebrow reveal-up">How it works</p>
+      <h2 class="section-title reveal-up">Three steps. No downloads to chase, no accounts to manage.</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal-up">
+        <span class="step-num">01</span>
+        <h3>Get an invite</h3>
+        <p>Your tutor sends your cohort a short invite code at the start of semester.</p>
+      </div>
+      <div class="step reveal-up">
+        <span class="step-num">02</span>
+        <h3>Join your room</h3>
+        <p>Enter the code once. You land straight in your cohort's shared space &mdash; no one else can see it.</p>
+      </div>
+      <div class="step reveal-up">
+        <span class="step-num">03</span>
+        <h3>Study together</h3>
+        <p>Build the question bank, run a round before class, or just drop into a session the night before.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Access / final CTA -->
+  <section class="access" id="access">
+    <div class="access-inner">
+      <p class="eyebrow reveal-up">Access</p>
+      <h2 class="access-title reveal-up">Recall isn't public &mdash; and that's the point.</h2>
+      <p class="access-sub reveal-up">
+        Every room is tied to a real cohort. No open sign-up, no strangers, no noise.
+        If your course is running it, your tutor already has your code.
+      </p>
+      <div class="reveal-up">
+        <span class="btn btn-primary btn-large" role="note">Ask your tutor for an invite code</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="brand brand-footer">Recall</span>
+    <nav class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#access">Access</a>
+    </nav>
+    <p class="footer-note">A study tool for one cohort at a time. Invite-only.</p>
+  </div>
+</footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.16/dist/lenis.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
