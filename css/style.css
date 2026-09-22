@@ -1,10 +1,26 @@
+/* ============ fonts (self-hosted — no third-party request on page load) ============ */
+@font-face{
+  font-family:'Fraunces';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url('../fonts/fraunces.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url('../fonts/inter.woff2') format('woff2');
+}
+
 /* ============ tokens ============ */
 :root{
   --cream: #F6F1E7;
   --cream-deep: #EEE6D6;
   --ink: #211D17;
   --ink-soft: #57503F;
-  --ink-faint: #8A8171;
+  --ink-faint: #6E6656; /* darkened from #8A8171 — original failed WCAG AA (3.4:1) on cream at small sizes */
   --accent: #C1512A;
   --accent-dim: #A8461F;
   --accent-tint: #F0DCCB;
@@ -75,7 +91,7 @@ img,svg{display:block; max-width:100%;}
   font-weight:600;
   letter-spacing:0.12em;
   text-transform:uppercase;
-  color:var(--accent);
+  color:var(--accent-dim); /* accent-dim, not accent — accent alone fails WCAG AA (4.17:1) at this size */
   margin-bottom:14px;
 }
 .section-title{
@@ -112,7 +128,7 @@ img,svg{display:block; max-width:100%;}
 }
 .nav-links a:hover{color:var(--ink);}
 .nav-cta{
-  color:var(--accent) !important;
+  color:var(--accent-dim) !important; /* accent-dim, not accent — accent alone fails WCAG AA at this size */
   display:inline-flex; align-items:center; gap:6px;
 }
 .nav-cta span{transition:transform 0.25s var(--ease);}
@@ -162,9 +178,9 @@ img,svg{display:block; max-width:100%;}
 .btn-primary{
   background:var(--ink);
   color:var(--cream);
-  transition:transform 0.3s var(--ease), background 0.3s var(--ease);
 }
-.btn-primary:hover{background:var(--accent); transform:translateY(-2px);}
+/* No hover state: these pills are not clickable controls (invite-only — no real
+   sign-up action exists), so no interactive affordance is implied. */
 .btn-large{padding:18px 34px; font-size:1.05rem;}
 
 /* ============ hero device mockup ============ */
@@ -290,7 +306,7 @@ img,svg{display:block; max-width:100%;}
 .feature-num{
   font-family:'Fraunces', serif;
   font-size:0.95rem;
-  color:var(--accent);
+  color:var(--accent-dim);
   font-weight:600;
 }
 .feature-copy h3{
@@ -393,12 +409,13 @@ img,svg{display:block; max-width:100%;}
 .network-hint{font-size:0.85rem; color:var(--ink-faint);}
 .network-reset{
   font-family:inherit;
-  font-size:0.82rem; font-weight:600; color:var(--accent);
+  font-size:0.82rem; font-weight:600; color:var(--accent-dim);
   background:none; border:1px solid var(--accent); border-radius:999px;
   padding:8px 16px; cursor:pointer;
   transition:background 0.25s var(--ease), color 0.25s var(--ease);
 }
-.network-reset:hover{background:var(--accent); color:#fff;}
+.network-reset:hover, .network-reset:focus-visible{background:var(--accent); color:#fff;}
+.network-reset:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
 
 .net-edge{ stroke:var(--ink); stroke-opacity:0.16; stroke-width:1.2; fill:none; transition:stroke 0.2s ease, stroke-opacity 0.2s ease, stroke-width 0.2s ease; }
 .net-edge.is-lit{ stroke:var(--accent); stroke-opacity:0.85; stroke-width:2; }
@@ -416,6 +433,8 @@ img,svg{display:block; max-width:100%;}
 .net-node circle.ring{ opacity:0; fill:none; stroke:var(--accent); stroke-width:2; transition:opacity 0.2s ease; }
 .net-node.is-selected circle.dot{ fill:var(--ink); }
 .net-node.is-selected circle.ring{ opacity:1; }
+.net-node:focus{ outline:none; }
+.net-node:focus-visible circle.ring{ opacity:1; stroke:var(--ink); stroke-dasharray:2 2; }
 
 .net-label{
   font-family:'Inter', sans-serif;
@@ -492,7 +511,7 @@ img,svg{display:block; max-width:100%;}
 }
 .step-num{
   font-family:'Fraunces', serif;
-  color:var(--accent);
+  color:var(--accent-dim);
   font-size:1.1rem;
   font-weight:600;
 }
@@ -522,8 +541,7 @@ img,svg{display:block; max-width:100%;}
   line-height:1.65;
   margin-bottom:38px;
 }
-.access .btn-primary{background:var(--accent); color:var(--cream);}
-.access .btn-primary:hover{background:var(--accent-dim); transform:translateY(-2px);}
+.access .btn-primary{background:var(--accent-dim); color:var(--cream);}
 
 /* ============ footer ============ */
 .footer{padding:56px 32px 40px; border-top:1px solid var(--line-soft);}
@@ -542,6 +560,77 @@ img,svg{display:block; max-width:100%;}
   color:var(--ink-faint);
   margin-top:6px;
 }
+.footer-legal{
+  width:100%;
+  display:flex; gap:20px; flex-wrap:wrap;
+  margin-top:20px;
+  padding-top:20px;
+  border-top:1px solid var(--line-soft);
+}
+.footer-legal a{font-size:0.82rem; color:var(--ink-soft);}
+.footer-legal a:hover{color:var(--ink);}
+.footer-disclaimer{
+  width:100%;
+  font-size:0.78rem;
+  line-height:1.6;
+  color:var(--ink-faint);
+  margin-top:10px;
+  max-width:60ch;
+}
+.footer-disclaimer a{color:var(--accent-dim); text-decoration:underline;}
+
+/* ============ legal pages ============ */
+.legal-main{
+  max-width:760px;
+  margin:0 auto;
+  padding:72px 32px 100px;
+}
+.legal-content h1{
+  font-size:clamp(2rem, 4vw, 2.8rem);
+  margin-bottom:8px;
+}
+.legal-updated{
+  font-size:0.85rem;
+  color:var(--ink-faint);
+  margin-bottom:32px;
+}
+.legal-callout{
+  background:#fff;
+  border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+  border-radius:var(--radius-sm);
+  padding:20px 22px;
+  font-size:0.98rem;
+  line-height:1.6;
+  color:var(--ink-soft);
+  margin-bottom:40px;
+}
+.legal-content h2{
+  font-size:1.35rem;
+  margin-top:44px;
+  margin-bottom:14px;
+}
+.legal-content p{
+  font-size:1rem;
+  line-height:1.7;
+  color:var(--ink-soft);
+  margin-bottom:16px;
+}
+.legal-content ul{
+  margin:0 0 16px;
+  padding-left:22px;
+}
+.legal-content li{
+  font-size:1rem;
+  line-height:1.7;
+  color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.legal-content a{
+  color:var(--accent-dim);
+  text-decoration:underline;
+}
+.legal-content a:hover{color:var(--accent);}
 
 /* ============ reveal defaults (JS controls animation) ============ */
 .reveal-up, .reveal-scale{will-change:transform, opacity;}

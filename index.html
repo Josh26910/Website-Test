@@ -6,10 +6,6 @@
 <title>Recall — Group study for your course cohort</title>
 <meta name="description" content="Recall is an invite-only quiz and study-group app built for course cohorts. Ask your tutor for an invite code.">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="css/style.css">
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%23c1512a%22/><text x=%2250%22 y=%2266%22 font-size=%2258%22 font-family=%22Georgia,serif%22 fill=%22%23f6f1e7%22 text-anchor=%22middle%22>R</text></svg>">
@@ -52,12 +48,12 @@
         run live rounds with your study group, and see what's actually sticking before the exam does.
       </p>
       <div class="hero-actions reveal-up">
-        <span class="btn btn-primary" role="note">Ask your tutor for an invite code</span>
+        <span class="btn btn-primary">Ask your tutor for an invite code</span>
         <span class="hero-note">No public sign-up. Access is invite-only, by design.</span>
       </div>
     </div>
 
-    <div class="hero-visual reveal-scale">
+    <div class="hero-visual reveal-scale" aria-hidden="true">
       <div class="device device-quiz">
         <div class="device-bar">
           <span class="dot"></span><span class="dot"></span><span class="dot"></span>
@@ -107,7 +103,7 @@
       <h2 class="section-title reveal-up">Every question your cohort adds makes the web stronger.</h2>
     </div>
     <div class="network-stage reveal-scale">
-      <svg id="networkSvg" viewBox="0 0 640 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+      <svg id="networkSvg" viewBox="0 0 640 420" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Interactive diagram of cohort topics and activity. Tab through the dots; press Enter or Space on one to see its connections or link it to another."></svg>
       <div class="network-controls">
         <p class="network-hint">Hover a topic to see everything moving inside it. Hover a smaller dot to see just its one link. Click two dots to connect them yourself.</p>
         <button type="button" class="network-reset" id="networkReset">Reset your links</button>
@@ -174,7 +170,7 @@
         <h3>Live group quizzes</h3>
         <p>Turn a shared question bank into a real-time round. Everyone answers on their own device, the room sees the scoreboard update as it happens.</p>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual" aria-hidden="true">
         <div class="mock mock-score">
           <div class="mock-row" style="--w:88%"><span>Priya</span><em>880</em></div>
           <div class="mock-row" style="--w:71%"><span>Declan</span><em>710</em></div>
@@ -190,7 +186,7 @@
         <h3>Shared question banks</h3>
         <p>Build a bank together as a cohort. Add a question from a lecture slide in seconds &mdash; every quiz after that gets a little smarter.</p>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual" aria-hidden="true">
         <div class="mock mock-bank">
           <div class="bank-item">Week 4 &mdash; Elasticity <span>12 cards</span></div>
           <div class="bank-item">Week 5 &mdash; Market failure <span>9 cards</span></div>
@@ -206,7 +202,7 @@
         <h3>Study session rooms</h3>
         <p>Drop into a room, pick a topic, and work through it out loud together &mdash; no scheduling five different group chats to find a time.</p>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual" aria-hidden="true">
         <div class="mock mock-room">
           <div class="room-title">Thursday recap &middot; open now</div>
           <div class="room-avatars">
@@ -226,7 +222,7 @@
         <h3>Progress, not grades</h3>
         <p>See which topics are actually sticking and which need another pass. It's for you &mdash; nothing here goes on a transcript.</p>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual" aria-hidden="true">
         <div class="mock mock-progress">
           <div class="prog-item"><span>Elasticity</span><div class="bar"><i style="--w:82%"></i></div></div>
           <div class="prog-item"><span>Market failure</span><div class="bar"><i style="--w:54%"></i></div></div>
@@ -271,7 +267,7 @@
         If your course is running it, your tutor already has your code.
       </p>
       <div class="reveal-up">
-        <span class="btn btn-primary btn-large" role="note">Ask your tutor for an invite code</span>
+        <span class="btn btn-primary btn-large">Ask your tutor for an invite code</span>
       </div>
     </div>
   </section>
@@ -287,6 +283,16 @@
       <a href="#access">Access</a>
     </nav>
     <p class="footer-note">A study tool for one cohort at a time. Invite-only.</p>
+    <nav class="footer-legal" aria-label="Legal">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms &amp; Conditions</a>
+      <a href="cookies.html">Cookie Policy</a>
+    </nav>
+    <p class="footer-disclaimer">
+      Recall is a design concept, not a live product. This site is a demonstration only: it creates no
+      accounts, processes no payments, and collects no personal data. See the
+      <a href="privacy.html">Privacy Policy</a> for details.
+    </p>
   </div>
 </footer>
 

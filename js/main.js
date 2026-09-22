@@ -155,6 +155,11 @@
       var g = document.createElementNS(NS, 'g');
       g.setAttribute('class', 'net-node' + (n.isHub ? ' is-hub' : ''));
       g.setAttribute('data-id', n.id);
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', n.isHub
+        ? n.label + ' topic — press Enter to see everything connected to it'
+        : n.label + ', part of ' + nodes[n.hub].label + ' — press Enter to see its link, or select another dot to connect them');
 
       var glow = document.createElementNS(NS, 'circle');
       glow.setAttribute('class', 'glow');
@@ -270,6 +275,25 @@
       if (selected !== null) return;
       if (!ev.target.closest('.net-node')) return;
       clearHighlight();
+    });
+
+    // Keyboard equivalents of hover (focus) and click (Enter/Space)
+    nodeLayer.addEventListener('focusin', function (ev) {
+      var g = ev.target.closest('.net-node');
+      if (!g || selected !== null) return;
+      highlight(Number(g.getAttribute('data-id')));
+    });
+    nodeLayer.addEventListener('focusout', function (ev) {
+      if (selected !== null) return;
+      if (!ev.target.closest('.net-node')) return;
+      clearHighlight();
+    });
+    nodeLayer.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Enter' && ev.key !== ' ' && ev.key !== 'Spacebar') return;
+      var g = ev.target.closest('.net-node');
+      if (!g) return;
+      ev.preventDefault();
+      g.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     });
 
     nodeLayer.addEventListener('click', function (ev) {
