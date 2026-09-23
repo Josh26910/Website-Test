@@ -1,7 +1,8 @@
 # Interactive network graph — build plan
 
-**Status:** Planning only. Nothing in this doc has been implemented yet.
-**Target implementer:** Opus 5.5 (or whichever session picks this up next).
+**Status:** Implemented on `claude/focused-tesla-24cead` — see §11 for what
+shipped and the decisions taken on the open questions in §9. The rest of this
+doc is the original plan, kept for reference.
 **Owner context:** This is the "Recall" landing page — a fictional invite-only
 study/quiz app concept, no real backend. Static site, deployed via GitHub
 Pages from `claude/quiz-app-landing-2c8796`.
@@ -205,16 +206,20 @@ afterthought — preserve and extend it:
 
 ## 9. Open decisions to confirm before/while building
 
-- [ ] Content subject: study topics (default assumption above) or a
-      finance-themed demo like the user's example?
-- [ ] Collapse behaviour: keeps growing (recommended) vs. click-to-collapse?
-- [ ] Keep the "click two nodes to connect them yourself" feature, and if so,
-      how does it read visually against "real" authored edges?
-- [ ] Does this replace the `#network` section in place, or does it need its
+- [x] Content subject: study topics (default assumption above) or a
+      finance-themed demo like the user's example? → **Study topics.**
+- [x] Collapse behaviour: keeps growing (recommended) vs. click-to-collapse?
+      → **Keeps growing.** "Reset graph" is the way back.
+- [x] Keep the "click two nodes to connect them yourself" feature, and if so,
+      how does it read visually against "real" authored edges? → **Kept, behind
+      a "Draw your own link" toggle**, drawn as dashed accent lines.
+- [x] Does this replace the `#network` section in place, or does it need its
       own section/heading copy rewritten to match the new behaviour (current
       copy says "Hover a topic..." which will be inaccurate once this is
-      tap/click-driven with expand semantics)?
-- [ ] Confirm the d3 CDN version/URL actually resolves before relying on it.
+      tap/click-driven with expand semantics)? → **Replaced in place.** Heading
+      kept, hint copy and SVG label rewritten.
+- [x] Confirm the d3 CDN version/URL actually resolves before relying on it.
+      → `d3/7.9.0` on cdnjs resolves and is the latest version listed there.
 
 ## 10. Non-goals for this pass
 
@@ -223,3 +228,57 @@ afterthought — preserve and extend it:
   client-side/in-memory, same as today.
 - Not replacing the separate scroll-driven quiz card deck (`#deck` section)
   — that's a different, already-working piece, out of scope here.
+
+## 11. What shipped
+
+Files:
+- `js/graph-data.js`: 53 nodes (root → 4 courses → topics → leaves), 3–4
+  levels deep. Several nodes have more than one parent: Equilibrium (ECON 201
+  + CHEM 204), Statistics (PSYC 101 research methods + ECON 201), Enzymes
+  (kinetics + metabolism), ATP (3 parents), Nash equilibrium, Price
+  discrimination, Cellular respiration, Activation energy.
+- `js/network-graph.js` replaces the old `initNetwork()` in `main.js`, which is
+  now removed. `main.js` exposes `window.Recall.EASE` so the graph reuses the
+  site's `power3.out` curve.
+- d3 7.9.0 (cdnjs) is added before `main.js`. The privacy, cookie and terms
+  pages now list D3 alongside GSAP and Lenis.
+
+Decisions on §9 (these are also noted in the header comment of
+`network-graph.js`):
+- **Content:** study topics. The load state is a "Your cohort" root pinned at
+  the centre, linked to the four courses from the old demo.
+- **Collapse:** keeps growing. Clicking never removes anything. "Reset graph"
+  goes back to the root and four courses, clears your own links and turns
+  auto-fit back on. Nothing can vanish from under keyboard focus.
+- **Click-to-connect:** kept, but behind a "Draw your own link" toggle
+  (`aria-pressed`), because a plain click now opens a topic. Your own links are
+  dashed accent lines, as before, and act as a weak spring in the simulation.
+  Escape clears the current selection first, then leaves link mode.
+- **Copy:** the section stays in place under the same heading. The hint text
+  and the SVG's `aria-label` are rewritten for tap/click-to-open.
+
+Behaviour notes / deviations from the plan:
+- **No flying arrows on hover.** The hub→branch arrow tweens needed fixed
+  endpoints. Lit edges now show a moving dash that flows away from the hovered
+  node (CSS animation, turned off under reduced motion).
+- **No ambient SVG wobble.** The physics already gives the graph life, and
+  rotating a zoomable canvas fights with pan and zoom. The glow pulse on
+  course nodes is kept.
+- **Auto-fit camera.** While the simulation runs, the view eases towards the
+  bounds of the whole graph. A real pan or zoom gesture turns this off. The
+  "Fit" button turns it back on.
+- **Zoom input without scroll-jacking.** A plain mouse wheel still scrolls
+  the page. Ctrl/⌘ + wheel or a trackpad pinch zooms. On touch, one finger
+  scrolls the page and two fingers pinch or pan. The +/−/Fit buttons cover
+  keyboard and touch users.
+- **Draggable nodes** (d3-drag). The root stays pinned to the centre.
+- **Label collision.** A small custom force keeps each "dot + label" box apart.
+  Plain circle collision let wide labels overlap on narrow screens. Label size
+  is counter-scaled against zoom (`--u`), so the boxes follow that scale.
+- **Keyboard:** new nodes go into the DOM right after the node that revealed
+  them, so Tab goes parent → children. Opening a topic from the keyboard moves
+  focus to its first new child. A mouse click leaves focus where it is. Enter
+  on a topic with nothing left to open reads out its connections through the
+  `role="status"` live region.
+- **Reduced motion:** the layout settles off-screen (300 synchronous ticks)
+  and the view jumps to fit. There are no GSAP tweens and no dash animation.
