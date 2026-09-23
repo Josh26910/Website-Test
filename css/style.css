@@ -389,72 +389,125 @@ img,svg{display:block; max-width:100%;}
 .network{padding:120px 0 40px;}
 .network .section-head{margin-bottom:56px;}
 .network-stage{
-  max-width:820px;
+  max-width:880px;
   margin:0 auto;
   padding:0 32px;
 }
-.network-stage > svg{
+.network-frame{position:relative;}
+.network-frame > svg{
   width:100%;
-  height:auto;
+  height:clamp(400px, 64vh, 560px);
   display:block;
   background:#fff;
   border:1px solid var(--line);
   border-radius:var(--radius);
   box-shadow:0 30px 60px -30px rgba(33,29,23,0.2);
+  cursor:grab;
+  touch-action:pan-x pan-y;
+  -webkit-user-select:none; user-select:none;
 }
+.network-frame > svg:active{cursor:grabbing;}
+.network-stage.is-unavailable .network-frame{display:none;}
+.network-stage.is-unavailable .network-actions{display:none;}
+
+.network-zoom{
+  position:absolute; right:12px; bottom:12px;
+  display:flex; gap:6px;
+}
+.network-zoom-btn{
+  font-family:inherit;
+  min-width:36px; height:36px;
+  padding:0 10px;
+  font-size:1.05rem; font-weight:600; line-height:1;
+  color:var(--ink-soft);
+  background:rgba(255,255,255,0.92);
+  border:1px solid var(--line);
+  border-radius:999px;
+  cursor:pointer;
+  transition:background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.network-zoom-fit{font-size:0.8rem;}
+.network-zoom-btn:hover{border-color:var(--ink-faint); color:var(--ink);}
+.network-zoom-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+
 .network-controls{
   display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
   margin-top:18px;
 }
-.network-hint{font-size:0.85rem; color:var(--ink-faint);}
-.network-reset{
+.network-hint{font-size:0.85rem; color:var(--ink-faint); max-width:52ch;}
+.network-actions{display:flex; gap:10px; flex-wrap:wrap;}
+.network-btn{
   font-family:inherit;
   font-size:0.82rem; font-weight:600; color:var(--accent-dim);
   background:none; border:1px solid var(--accent); border-radius:999px;
   padding:8px 16px; cursor:pointer;
   transition:background 0.25s var(--ease), color 0.25s var(--ease);
 }
-.network-reset:hover, .network-reset:focus-visible{background:var(--accent); color:#fff;}
-.network-reset:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+/* accent-dim fill (not accent) so white text keeps WCAG AA contrast */
+.network-btn:hover, .network-btn:focus-visible, .network-btn[aria-pressed="true"]{background:var(--accent-dim); border-color:var(--accent-dim); color:#fff;}
+.network-btn:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
 
-.net-edge{ stroke:var(--ink); stroke-opacity:0.16; stroke-width:1.2; fill:none; transition:stroke 0.2s ease, stroke-opacity 0.2s ease, stroke-width 0.2s ease; }
-.net-edge.is-lit{ stroke:var(--accent); stroke-opacity:0.85; stroke-width:2; }
-.net-edge.is-dim{ stroke-opacity:0.06; }
-.net-edge.is-custom{ stroke:var(--accent); stroke-dasharray:4 4; stroke-opacity:0.75; stroke-width:1.6; }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
 
-.net-node{ cursor:pointer; }
+/* Edges */
+.net-edge{ stroke:var(--ink); stroke-opacity:0.2; stroke-width:1.3; fill:none; transition:stroke 0.2s ease, stroke-opacity 0.2s ease, stroke-width 0.2s ease; }
+.net-edge.is-lit{ stroke:var(--accent); stroke-opacity:0.9; stroke-width:2; stroke-dasharray:7 4; animation:net-flow 0.7s linear infinite; }
+.net-edge.is-lit.is-reverse{ animation-direction:reverse; }
+.net-edge.is-dim{ stroke-opacity:0.07; }
+.net-edge.is-custom{ stroke:var(--accent); stroke-dasharray:4 4; stroke-opacity:0.8; stroke-width:1.6; }
+.net-edge.is-custom.is-dim{ stroke-opacity:0.25; }
+@keyframes net-flow{ from{stroke-dashoffset:11;} to{stroke-dashoffset:0;} }
+
+/* Nodes */
+.net-node{ cursor:pointer; transition:opacity 0.2s ease; }
+.net-node circle.hit{ fill:transparent; }
 .net-node circle.dot{ fill:var(--ink-faint); transition:fill 0.2s ease; }
-.net-node.is-hub circle.dot{ fill:var(--accent); }
-.net-node circle.glow{ fill:var(--accent); opacity:0; transition:opacity 0.3s ease; }
-.net-node.is-hub circle.glow{ opacity:0.18; }
+.net-node.is-root circle.dot{ fill:var(--ink); }
+.net-node.is-course circle.dot{ fill:var(--accent); }
+.net-node.is-open.is-topic circle.dot{ fill:var(--ink-soft); }
+.net-node circle.glow{ fill:var(--accent); opacity:0; transition:opacity 0.3s ease; pointer-events:none; }
+.net-node.is-course circle.glow{ opacity:0.18; }
 .net-node.is-lit circle.dot{ fill:var(--accent); }
-.net-node.is-lit circle.glow{ opacity:0.32; }
-.net-node.is-dim{ opacity:0.3; transition:opacity 0.2s ease; }
-.net-node circle.ring{ opacity:0; fill:none; stroke:var(--accent); stroke-width:2; transition:opacity 0.2s ease; }
+.net-node.is-root.is-lit circle.dot{ fill:var(--ink); }
+.net-node.is-lit circle.glow{ opacity:0.3; }
+.net-node.is-dim{ opacity:0.35; }
+/* dashed ring = "there's more inside" */
+.net-node circle.more{ opacity:0; fill:none; stroke:var(--accent-dim); stroke-width:1.4; stroke-dasharray:2.5 2.5; transition:opacity 0.2s ease; pointer-events:none; }
+.net-node.has-more circle.more{ opacity:1; }
+.net-node circle.ring{ opacity:0; fill:none; stroke:var(--accent); stroke-width:2; transition:opacity 0.2s ease; pointer-events:none; }
 .net-node.is-selected circle.dot{ fill:var(--ink); }
 .net-node.is-selected circle.ring{ opacity:1; }
+.net-node.is-selected circle.more{ opacity:0; }
 .net-node:focus{ outline:none; }
 .net-node:focus-visible circle.ring{ opacity:1; stroke:var(--ink); stroke-dasharray:2 2; }
+.net-node:focus-visible circle.more{ opacity:0; }
 
+.network-stage.is-linking .network-frame > svg{ cursor:crosshair; }
+
+/* Labels — font size is divided by zoom (--u, set in JS) so they stay readable */
 .net-label{
   font-family:'Inter', sans-serif;
-  font-size:9px;
+  font-size:calc(10.5px * var(--u, 1));
   font-weight:600;
   fill:var(--ink-soft);
   paint-order:stroke;
   stroke:#fff;
-  stroke-width:3px;
+  stroke-width:calc(3px * var(--u, 1));
   stroke-linejoin:round;
-  opacity:0;
   pointer-events:none;
-  transition:opacity 0.25s ease;
 }
-.net-label.is-hub-label{ font-size:11px; font-weight:700; fill:var(--accent); }
-.net-label.is-visible{ opacity:1; }
+.net-node.is-leaf .net-label{ font-weight:500; }
+.net-node.is-course .net-label{ font-size:calc(12px * var(--u, 1)); font-weight:700; fill:var(--accent-dim); }
+.net-node.is-root .net-label{ font-size:calc(12.5px * var(--u, 1)); font-weight:700; fill:var(--ink); }
+.net-node.is-lit .net-label{ fill:var(--ink); }
+.net-node.is-course.is-lit .net-label{ fill:var(--accent-dim); }
 
-.net-arrow{ opacity:0; pointer-events:none; transition:opacity 0.2s ease; }
-.net-arrow polygon{ fill:var(--accent); }
-.net-arrow.is-active{ opacity:0.9; }
+@media (prefers-reduced-motion: reduce){
+  .net-edge.is-lit{ animation:none; }
+}
 
 /* ============ scroll-driven quiz deck ============ */
 .deck{
